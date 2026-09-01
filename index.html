@@ -8,6 +8,11 @@
 <body>
 <x-dc>
 <helmet>
+<link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="180x180" href="./assets/favicon-180.png" />
+<link rel="apple-touch-icon" href="./assets/favicon-180.png" />
+<title>Khan Metals — Gold &amp; Silver Bullion, Australia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -32,6 +37,8 @@
   @media (max-width: 1080px) {
     .km-nav-link { display: none !important; }
     .km-burger { display: block; }
+    .km-logo { height: 76px !important; }
+    .km-head-bar { padding-top: 6px !important; padding-bottom: 6px !important; min-height: 88px !important; }
     .km-menu { display: block !important; }
   }
   @media (max-width: 900px) {
@@ -43,14 +50,14 @@
     .km-hero { padding-top: 64px !important; padding-bottom: 64px !important; }
     .km-hero-img { aspect-ratio: 4 / 3 !important; }
     .km-row { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
-    .km-logo { height: 54px !important; }
     .km-spot { grid-template-columns: 1fr !important; gap: 18px !important; }
   }
   @media (max-width: 640px) {
     .km-pad { padding-left: 18px !important; padding-right: 18px !important; }
     .km-hero { padding-top: 48px !important; padding-bottom: 56px !important; }
     .km-sect { padding-top: 64px !important; padding-bottom: 64px !important; }
-    .km-logo { height: 46px !important; }
+    .km-logo { height: 62px !important; }
+    .km-head-bar { padding-top: 5px !important; padding-bottom: 5px !important; min-height: 72px !important; }
     .km-tel { padding: 10px 14px !important; font-size: 12px !important; }
     .km-nav { gap: 10px !important; }
     .km-burger { padding: 10px 14px !important; }
@@ -68,9 +75,9 @@
 <div style="font-family: 'Jost', sans-serif; color: #35291d; background: #FAF7F1; overflow-x: hidden">
 
   <header style="position: sticky; top: 0; z-index: 50; background: rgba(250,247,241,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(53,41,29,0.1)">
-    <div class="km-pad" style="max-width: 1240px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; gap: 32px">
+    <div class="km-pad km-head-bar" style="max-width: 1240px; margin: 0 auto; padding: 6px 32px; display: flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 88px">
       <a href="#top" style="display: block; flex: 0 0 auto">
-        <img src="./assets/logo-wide.png" alt="Khan Metals — Certified Gold &amp; Silver Bullion" class="km-logo" style="height: 76px; width: auto; display: block; mix-blend-mode: multiply" />
+        <img src="./assets/logo-wide-trim.png" alt="Khan Metals — Certified Gold &amp; Silver Bullion" class="km-logo" style="height: 76px; width: auto; display: block; mix-blend-mode: multiply" />
       </a>
       <nav class="km-nav" style="display: flex; align-items: center; gap: 30px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">
         <a href="#products" class="km-nav-link" style="color: #35291d" style-hover="color: #A8843B">Bullion</a>

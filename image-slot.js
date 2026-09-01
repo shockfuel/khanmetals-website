@@ -438,7 +438,7 @@
 
   class ImageSlot extends HTMLElement {
     static get observedAttributes() {
-      return ['shape', 'radius', 'mask', 'fit', 'placeholder', 'src', 'id', 'credit', 'credit-href'];
+      return ['shape', 'radius', 'mask', 'fit', 'placeholder', 'src', 'id', 'credit', 'credit-href', 'alt'];
     }
 
     /** Duplicate-slide hook (called by deck-stage, see its
@@ -1107,6 +1107,11 @@
         };
       }
       this._cap.textContent = this.getAttribute('placeholder') || 'Drop an image';
+      // SEO/accessibility: mirror the author-set `alt` attribute onto the
+      // rendered <img>. Falls back to empty string (decorative) so a slot
+      // with no alt set doesn't inherit stale text from a prior render.
+      const altText = this.getAttribute('alt') || '';
+      this._img.setAttribute('alt', altText);
       // Toggle via style.display — the [hidden] attribute alone loses to
       // the display:flex / display:block rules in the stylesheet above.
       // An Unsplash src with no credit attribute must NOT render — showing

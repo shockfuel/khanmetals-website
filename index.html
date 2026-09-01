@@ -1,1 +1,677 @@
-<h1>Coming very soon</h1>   
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="./image-slot.js"></script>
+<style>
+  body { margin: 0; background: #FAF7F1; }
+  * { box-sizing: border-box; }
+  a { color: #8A6B2A; text-decoration: none; }
+  a:hover { color: #35291d; }
+  html { scroll-behavior: smooth; }
+  .km-chip, .km-metal { font-family: 'Jost', sans-serif; cursor: pointer; background: transparent; color: rgba(244,237,224,0.7);
+    border: 1px solid rgba(192,154,76,0.35); padding: 9px 15px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: all .15s ease; }
+  .km-chip:hover, .km-metal:hover { border-color: #C09A4C; color: #F4EDE0; }
+  .km-chip[aria-pressed="true"], .km-metal[aria-pressed="true"] { background: #C09A4C; border-color: #C09A4C; color: #241B12; }
+  .km-metal { padding: 12px 26px; }
+  @keyframes kmRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .km-nav a { white-space: nowrap; }
+  .km-burger { display: none; font-family: 'Jost', sans-serif; cursor: pointer; background: transparent; color: #35291d;
+    border: 1px solid rgba(53,41,29,0.3); padding: 12px 18px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .km-burger:hover { border-color: #C09A4C; color: #A8843B; }
+  .km-menu { display: none; }
+  @media (max-width: 1080px) {
+    .km-nav-link { display: none !important; }
+    .km-burger { display: block; }
+    .km-menu { display: block !important; }
+  }
+  @media (max-width: 900px) {
+    .km-2col { grid-template-columns: 1fr !important; gap: 44px !important; }
+    .km-steps { grid-template-columns: 56px 1fr !important; gap: 18px !important; }
+    .km-nav { gap: 18px !important; flex-wrap: wrap; justify-content: flex-end; }
+    .km-nav-link { display: none !important; }
+    .km-pad { padding-left: 20px !important; padding-right: 20px !important; }
+    .km-hero { padding-top: 64px !important; padding-bottom: 64px !important; }
+    .km-hero-img { aspect-ratio: 4 / 3 !important; }
+    .km-row { flex-direction: column !important; align-items: flex-start !important; gap: 6px !important; }
+    .km-logo { height: 54px !important; }
+    .km-spot { grid-template-columns: 1fr !important; gap: 18px !important; }
+  }
+  @media (max-width: 640px) {
+    .km-pad { padding-left: 18px !important; padding-right: 18px !important; }
+    .km-hero { padding-top: 48px !important; padding-bottom: 56px !important; }
+    .km-sect { padding-top: 64px !important; padding-bottom: 64px !important; }
+    .km-logo { height: 46px !important; }
+    .km-tel { padding: 10px 14px !important; font-size: 12px !important; }
+    .km-nav { gap: 10px !important; }
+    .km-burger { padding: 10px 14px !important; }
+    .km-chart-bar { padding: 18px 16px !important; gap: 14px !important; }
+    .km-chip { padding: 8px 11px !important; font-size: 11px !important; letter-spacing: 0.1em !important; }
+    .km-metal { padding: 10px 20px !important; }
+    .km-steps { grid-template-columns: 44px 1fr !important; gap: 14px !important; padding: 24px 0 !important; }
+    .km-2col { gap: 34px !important; }
+    .km-break { word-break: break-word; overflow-wrap: anywhere; }
+    .km-card-pad { padding: 26px 20px 30px !important; }
+  }
+</style>
+</helmet>
+
+<div style="font-family: 'Jost', sans-serif; color: #35291d; background: #FAF7F1; overflow-x: hidden">
+
+  <header style="position: sticky; top: 0; z-index: 50; background: rgba(250,247,241,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(53,41,29,0.1)">
+    <div class="km-pad" style="max-width: 1240px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; gap: 32px">
+      <a href="#top" style="display: block; flex: 0 0 auto">
+        <img src="./assets/logo-wide.png" alt="Khan Metals — Certified Gold &amp; Silver Bullion" class="km-logo" style="height: 76px; width: auto; display: block; mix-blend-mode: multiply" />
+      </a>
+      <nav class="km-nav" style="display: flex; align-items: center; gap: 30px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase">
+        <a href="#products" class="km-nav-link" style="color: #35291d" style-hover="color: #A8843B">Bullion</a>
+        <a href="#charts" class="km-nav-link" style="color: #35291d" style-hover="color: #A8843B">Charts</a>
+        <a href="#how" class="km-nav-link" style="color: #35291d" style-hover="color: #A8843B">How to Buy</a>
+        <a href="#why" class="km-nav-link" style="color: #35291d" style-hover="color: #A8843B">Why Khan</a>
+        <a href="#about" class="km-nav-link" style="color: #35291d" style-hover="color: #A8843B">About</a>
+        <a href="tel:0420567828" class="km-tel" style="display: flex; align-items: center; gap: 10px; padding: 12px 20px; background: #35291d; color: #F3E6C8; border: 1px solid #35291d" style-hover="background: #C09A4C; border-color: #C09A4C; color: #241B12">0420 567 828</a>
+        <button type="button" class="km-burger" onClick="{{ toggleMenu }}">{{ burgerLabel }}</button>
+      </nav>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div class="km-menu" style="border-top: 1px solid rgba(53,41,29,0.12); background: #FAF7F1">
+        <div class="km-pad" style="max-width: 1240px; margin: 0 auto; padding: 8px 32px 20px; display: grid; gap: 2px; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase">
+          <a href="#products" onClick="{{ closeMenu }}" style="color: #35291d; padding: 16px 0; border-bottom: 1px solid rgba(53,41,29,0.1)" style-hover="color: #A8843B">Bullion</a>
+          <a href="#charts" onClick="{{ closeMenu }}" style="color: #35291d; padding: 16px 0; border-bottom: 1px solid rgba(53,41,29,0.1)" style-hover="color: #A8843B">Charts</a>
+          <a href="#how" onClick="{{ closeMenu }}" style="color: #35291d; padding: 16px 0; border-bottom: 1px solid rgba(53,41,29,0.1)" style-hover="color: #A8843B">How to Buy</a>
+          <a href="#why" onClick="{{ closeMenu }}" style="color: #35291d; padding: 16px 0; border-bottom: 1px solid rgba(53,41,29,0.1)" style-hover="color: #A8843B">Why Khan</a>
+          <a href="#about" onClick="{{ closeMenu }}" style="color: #35291d; padding: 16px 0; border-bottom: 1px solid rgba(53,41,29,0.1)" style-hover="color: #A8843B">About</a>
+          <a href="mailto:majid@khanmetals.com.au" onClick="{{ closeMenu }}" style="color: #A8843B; padding: 16px 0" style-hover="color: #35291d">majid@khanmetals.com.au</a>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <section style="background: #35291d; color: #F4EDE0; border-top: 1px solid rgba(192,154,76,0.25)">
+    <div class="km-pad km-spot" style="max-width: 1240px; margin: 0 auto; padding: 26px 32px; display: grid; grid-template-columns: auto 1fr 1fr auto; align-items: center; gap: 36px">
+      <div>
+        <div style="display: flex; align-items: center; gap: 9px; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(244,237,224,0.55)">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: #7FBF7F; box-shadow: 0 0 0 3px rgba(127,191,127,0.18)"></span>
+          <span>Live spot</span>
+        </div>
+        <div style="font-size: 12px; letter-spacing: 0.06em; color: rgba(244,237,224,0.66); margin-top: 8px; max-width: 220px; line-height: 1.5">{{ stamp }}</div>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap">
+        <span style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #C09A4C">Gold</span>
+        <span style="font-family: 'Cormorant Garamond', serif; font-size: 30px; line-height: 1; color: #F4EDE0">{{ goldOz }}</span>
+        <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244,237,224,0.5)">/ oz &nbsp;·&nbsp; {{ goldG }} / g</span>
+      </div>
+      <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap">
+        <span style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #B9BCC0">Silver</span>
+        <span style="font-family: 'Cormorant Garamond', serif; font-size: 30px; line-height: 1; color: #F4EDE0">{{ silverOz }}</span>
+        <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244,237,224,0.5)">/ oz &nbsp;·&nbsp; {{ silverKg }} / kg</span>
+      </div>
+      <a href="mailto:majid@khanmetals.com.au" style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #DCBB78; white-space: nowrap">Get a firm quote →</a>
+    </div>
+  </section>
+
+  <section id="top" style="position: relative; background: #241B12; color: #F4EDE0; overflow: hidden">
+    <div style="position: absolute; inset: 0; background: radial-gradient(120% 90% at 85% 10%, rgba(192,154,76,0.28), transparent 60%)"></div>
+    <div style="position: absolute; inset: 0; opacity: 0.5; background: repeating-linear-gradient(115deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 9px)"></div>
+    <div class="km-2col km-pad km-hero" style="position: relative; max-width: 1240px; margin: 0 auto; padding: 108px 32px 96px; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 72px; align-items: center">
+      <div style="animation: kmRise 0.8s ease both">
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #C09A4C">
+          <span style="width: 42px; height: 1px; background: #C09A4C"></span>
+          <span>Australian Bullion Dealer</span>
+        </div>
+        <h1 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(46px, 5.4vw, 84px); line-height: 1.02; letter-spacing: -0.015em; margin: 26px 0 0">
+          Certified gold &amp; silver,<br /><em style="font-style: italic; color: #DCBB78">held in your own hands.</em>
+        </h1>
+        <p style="max-width: 520px; font-size: 17px; line-height: 1.7; color: rgba(244,237,224,0.72); margin: 26px 0 0; text-wrap: pretty">
+          Khan Metals supplies investment-grade bullion bars and coins with verified purity, transparent live-market pricing and discreet delivery Australia-wide.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px">
+          <a href="#products" style="padding: 17px 30px; background: #C09A4C; color: #241B12; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase" style-hover="background: #DCBB78">View Bullion</a>
+          <a href="mailto:majid@khanmetals.com.au" style="padding: 17px 30px; border: 1px solid rgba(244,237,224,0.35); color: #F4EDE0; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase" style-hover="border-color: #C09A4C; color: #DCBB78">Request a Quote</a>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 32px 44px; margin-top: 56px; padding-top: 30px; border-top: 1px solid rgba(244,237,224,0.14)">
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: #DCBB78">99.99%</div>
+            <div style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,237,224,0.55); margin-top: 4px">Fine gold purity</div>
+          </div>
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: #DCBB78">LBMA</div>
+            <div style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,237,224,0.55); margin-top: 4px">Refiner sourced</div>
+          </div>
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: #DCBB78">Insured</div>
+            <div style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,237,224,0.55); margin-top: 4px">Tracked dispatch</div>
+          </div>
+        </div>
+      </div>
+      <div class="km-hero-img" style="position: relative; aspect-ratio: 4 / 5; border: 1px solid rgba(192,154,76,0.4); padding: 14px; animation: kmRise 1s ease 0.15s both">
+        <div style="position: relative; width: 100%; height: 100%; background: #1B140D">
+          <image-slot id="km-hero" shape="rect" src="./assets/hero-kangaroo-crop.png" placeholder="Drop a hero photo"></image-slot>
+        </div>
+        <div style="position: absolute; bottom: -1px; left: -1px; padding: 12px 18px; background: #C09A4C; color: #241B12; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase">Assay certified</div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="charts" style="background: #1B140D; color: #F4EDE0; border-top: 1px solid rgba(192,154,76,0.22)">
+    <div class="km-pad" style="max-width: 1240px; margin: 0 auto; padding: 92px 32px">
+      <div class="km-chart-head" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; flex-wrap: wrap">
+        <div>
+          <div style="font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #A8843B">Market History</div>
+          <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(30px, 3.2vw, 46px); line-height: 1.1; margin: 14px 0 0">The last hour, or the last twenty years</h2>
+        </div>
+        <div style="display: flex; gap: 8px">
+          <button type="button" class="km-metal" aria-pressed="{{ metalGold }}" onClick="{{ pickGold }}">Gold</button>
+          <button type="button" class="km-metal" aria-pressed="{{ metalSilver }}" onClick="{{ pickSilver }}">Silver</button>
+        </div>
+      </div>
+
+      <div style="margin-top: 40px; border: 1px solid rgba(192,154,76,0.28); background: #241B12">
+        <div class="km-chart-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 28px; border-bottom: 1px solid rgba(192,154,76,0.18); flex-wrap: wrap">
+          <div>
+            <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap">
+              <span style="font-family: 'Cormorant Garamond', serif; font-size: 40px; line-height: 1; color: #F4EDE0">{{ readPrice }}</span>
+              <span style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244,237,224,0.55)">{{ readLabel }}{{ readWhen }}</span>
+            </div>
+            <div style="font-size: 13px; letter-spacing: 0.06em; margin-top: 8px; color: {{ chgColor }}">{{ chgLabel }}</div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{ chips }}" as="chip" hint-placeholder-count="7">
+              <button type="button" class="km-chip" aria-pressed="{{ chip.on }}" onClick="{{ chip.click }}">{{ chip.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="position: relative; padding: 18px 20px 10px">
+          <div style="position: absolute; top: 18px; left: 20px; width: 56px; height: 300px; pointer-events: none">
+            <sc-for list="{{ yTicks }}" as="t" hint-placeholder-count="4">
+              <span style="position: absolute; right: 8px; top: {{ t.top }}; font-size: 12px; color: rgba(244,237,224,0.55); white-space: nowrap">{{ t.label }}</span>
+            </sc-for>
+          </div>
+          <svg viewBox="0 0 1000 300" preserveAspectRatio="none" style="display: block; width: 100%; height: 300px; touch-action: none" onMouseMove="{{ onMove }}" onMouseLeave="{{ onLeave }}" onTouchStart="{{ onMove }}" onTouchMove="{{ onMove }}" onTouchEnd="{{ onLeave }}">
+            <defs>
+              <linearGradient id="kmGold" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#C09A4C" stop-opacity="0.42" />
+                <stop offset="100%" stop-color="#C09A4C" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="kmSilver" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#AEB5BC" stop-opacity="0.38" />
+                <stop offset="100%" stop-color="#AEB5BC" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <sc-for list="{{ yTicks }}" as="t" hint-placeholder-count="4">
+              <line x1="62" x2="986" y1="{{ t.y }}" y2="{{ t.y }}" stroke="rgba(244,237,224,0.1)" stroke-width="1" />
+            </sc-for>
+            <path d="{{ chartArea }}" fill="{{ chartFill }}" />
+            <path d="{{ chartLine }}" fill="none" stroke="{{ chartStroke }}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+            <line x1="{{ hx }}" x2="{{ hx }}" y1="16" y2="272" stroke="rgba(244,237,224,0.35)" stroke-width="1" stroke-dasharray="3 3" />
+            <circle cx="{{ hx }}" cy="{{ hy }}" r="4.5" fill="#241B12" stroke="{{ chartStroke }}" stroke-width="2" />
+          </svg>
+          <div style="display: flex; justify-content: space-between; padding: 4px 14px 0 62px">
+            <sc-for list="{{ xTicks }}" as="t" hint-placeholder-count="5">
+              <span style="font-size: 12px; color: rgba(244,237,224,0.5)">{{ t.label }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 16px 28px 22px; border-top: 1px solid rgba(192,154,76,0.14); font-size: 12px; color: rgba(244,237,224,0.6)">
+          <span>{{ chartNote }}</span>
+          <span>Indicative reference prices · not a tradable quote</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="products" class="km-pad km-sect" style="max-width: 1240px; margin: 0 auto; padding: 104px 32px 40px">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap">
+      <div>
+        <div style="font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #A8843B">The Range</div>
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(34px, 3.8vw, 56px); line-height: 1.08; margin: 16px 0 0">Bars and coins for every position size</h2>
+      </div>
+      <p style="max-width: 380px; font-size: 16px; line-height: 1.7; color: rgba(53,41,29,0.7); margin: 0">Stock rotates with the market. Tell us weight and metal and we'll confirm availability the same day.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; margin-top: 56px">
+      <article style="background: #fff; border: 1px solid rgba(53,41,29,0.12)" style-hover="border-color: #C09A4C">
+        <div style="position: relative; aspect-ratio: 1 / 1; background: #F1EBE0">
+          <image-slot id="km-p1" shape="rect" src="./assets/gold-bars-new.png" placeholder="Gold bars"></image-slot>
+        </div>
+        <div style="padding: 26px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 26px; margin: 0">Gold Bullion Bars</h3>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(53,41,29,0.68); margin: 12px 0 0">1g through to 1kg cast and minted bars, 99.99% fine, serial-numbered with assay card.</p>
+        </div>
+      </article>
+      <article style="background: #fff; border: 1px solid rgba(53,41,29,0.12)" style-hover="border-color: #C09A4C">
+        <div style="position: relative; aspect-ratio: 1 / 1; background: #F1EBE0">
+          <image-slot id="km-p2" shape="rect" src="./assets/gold-coins.png" placeholder="Gold coins"></image-slot>
+        </div>
+        <div style="padding: 26px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 26px; margin: 0">Gold Coins</h3>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(53,41,29,0.68); margin: 12px 0 0">Australian sovereigns and half-sovereigns alongside recognised international issues, 1/10oz to 1oz.</p>
+        </div>
+      </article>
+      <article style="background: #fff; border: 1px solid rgba(53,41,29,0.12)" style-hover="border-color: #C09A4C">
+        <div style="position: relative; aspect-ratio: 1 / 1; background: #F1EBE0">
+          <image-slot id="km-p3" shape="rect" src="./assets/silver-bars.png" placeholder="Silver bars"></image-slot>
+        </div>
+        <div style="padding: 26px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 26px; margin: 0">Silver Bullion Bars</h3>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(53,41,29,0.68); margin: 12px 0 0">100g, 1kg and 10oz bars at 99.9% fine — the practical entry point for a first holding.</p>
+        </div>
+      </article>
+      <article style="background: #fff; border: 1px solid rgba(53,41,29,0.12)" style-hover="border-color: #C09A4C">
+        <div style="position: relative; aspect-ratio: 1 / 1; background: #F1EBE0">
+          <image-slot id="km-p4" shape="rect" src="./assets/silver-coins-au.png" placeholder="Silver coins"></image-slot>
+        </div>
+        <div style="padding: 26px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 26px; margin: 0">Silver Coins &amp; Rounds</h3>
+          <p style="font-size: 15px; line-height: 1.65; color: rgba(53,41,29,0.68); margin: 12px 0 0">Perth Mint Kookaburra, Kangaroo and Koala issues, sealed in tubes as struck.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="how" class="km-pad km-sect" style="max-width: 1240px; margin: 0 auto; padding: 96px 32px">
+    <div class="km-2col" style="border-top: 1px solid rgba(53,41,29,0.15); padding-top: 72px; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 72px">
+      <div>
+        <div style="font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #A8843B">How to Buy</div>
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(32px, 3.4vw, 48px); line-height: 1.1; margin: 16px 0 0">Three steps, no account required</h2>
+        <a href="mailto:majid@khanmetals.com.au" style="display: inline-block; margin-top: 28px; padding: 16px 28px; background: #35291d; color: #F3E6C8; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase" style-hover="background: #C09A4C; color: #241B12">Start an Order</a>
+      </div>
+      <div style="display: grid; gap: 2px">
+        <div class="km-steps" style="display: grid; grid-template-columns: 88px 1fr; gap: 28px; padding: 32px 0; border-top: 1px solid rgba(53,41,29,0.14)">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 44px; color: #C09A4C; line-height: 1">01</div>
+          <div>
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0">Enquire</h3>
+            <p style="font-size: 16px; line-height: 1.7; color: rgba(53,41,29,0.7); margin: 8px 0 0">Call or email with the metal and weight you want. We quote against live spot plus a fixed premium — nothing hidden.</p>
+          </div>
+        </div>
+        <div class="km-steps" style="display: grid; grid-template-columns: 88px 1fr; gap: 28px; padding: 32px 0; border-top: 1px solid rgba(53,41,29,0.14)">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 44px; color: #C09A4C; line-height: 1">02</div>
+          <div>
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0">Lock the price</h3>
+            <p style="font-size: 16px; line-height: 1.7; color: rgba(53,41,29,0.7); margin: 8px 0 0">Confirm the quote and your rate is fixed. Settle by bank transfer to our business account.</p>
+          </div>
+        </div>
+        <div class="km-steps" style="display: grid; grid-template-columns: 88px 1fr; gap: 28px; padding: 32px 0; border-top: 1px solid rgba(53,41,29,0.14); border-bottom: 1px solid rgba(53,41,29,0.14)">
+          <div style="font-family: 'Cormorant Garamond', serif; font-size: 44px; color: #C09A4C; line-height: 1">03</div>
+          <div>
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0">Collect or receive</h3>
+            <p style="font-size: 16px; line-height: 1.7; color: rgba(53,41,29,0.7); margin: 8px 0 0">Arrange in-person collection, or insured tracked dispatch in plain packaging with signature on delivery.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why" style="background: #241B12; color: #F4EDE0">
+    <div class="km-pad km-sect" style="max-width: 1240px; margin: 0 auto; padding: 100px 32px">
+      <div style="font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #C09A4C">Why Khan Metals</div>
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; margin: 16px 0 60px; max-width: 700px">A dealer you can actually get on the phone</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: rgba(192,154,76,0.28)">
+        <div style="background: #241B12; padding: 40px 32px 44px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0; color: #DCBB78">Verified purity</h3>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(244,237,224,0.7); margin: 12px 0 0">Every item sourced from accredited refiners and mints, supplied with its assay or mint packaging intact.</p>
+        </div>
+        <div style="background: #241B12; padding: 40px 32px 44px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0; color: #DCBB78">Transparent premiums</h3>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(244,237,224,0.7); margin: 12px 0 0">You see the spot price and the premium separately. No spread games, no surprise handling fees.</p>
+        </div>
+        <div style="background: #241B12; padding: 40px 32px 44px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0; color: #DCBB78">Discreet handling</h3>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(244,237,224,0.7); margin: 12px 0 0">Unmarked insured parcels, private collection by appointment, and your details kept to our records only.</p>
+        </div>
+        <div style="background: #241B12; padding: 40px 32px 44px">
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 24px; margin: 0; color: #DCBB78">Buy-back offered</h3>
+          <p style="font-size: 15px; line-height: 1.7; color: rgba(244,237,224,0.7); margin: 12px 0 0">When you're ready to sell, bring it back. We quote on metal we've supplied without an inspection charge.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="km-pad km-sect" style="max-width: 1240px; margin: 0 auto; padding: 104px 32px">
+    <div class="km-2col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center">
+      <div style="position: relative; aspect-ratio: 5 / 4; background: #F1EBE0">
+        <image-slot id="km-about" shape="rect" src="./assets/about-metal.png" placeholder="Drop a photo — counter, safe, or portrait"></image-slot>
+      </div>
+      <div>
+        <div style="font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #A8843B">About</div>
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(32px, 3.4vw, 48px); line-height: 1.1; margin: 16px 0 0">Precious metals, plainly dealt</h2>
+        <p style="font-size: 17px; line-height: 1.75; color: rgba(53,41,29,0.75); margin: 24px 0 0; text-wrap: pretty">Khan Metals is an independent Australian bullion dealer. We keep the business deliberately small: one point of contact, direct refiner relationships, and a preference for customers who intend to hold what they buy.</p>
+        <p style="font-size: 17px; line-height: 1.75; color: rgba(53,41,29,0.75); margin: 18px 0 0; text-wrap: pretty">Whether you're converting a first few thousand dollars into silver or building a long-term gold position, you'll get the same answer to the same question — and the price you were quoted.</p>
+        <div style="display: flex; align-items: center; gap: 18px; margin-top: 34px">
+          <img src="./assets/logo-square.png" alt="Khan Metals" style="height: 92px; width: auto; mix-blend-mode: multiply" />
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; color: rgba(53,41,29,0.7)">Majid Khan, Director</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="background: #C09A4C; color: #241B12">
+    <div class="km-2col km-pad km-sect" style="max-width: 1240px; margin: 0 auto; padding: 92px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center">
+      <div>
+        <div style="font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(36,27,18,0.65)">Contact</div>
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: clamp(34px, 3.8vw, 56px); line-height: 1.06; margin: 16px 0 0">Ask for today's price on the metal you want.</h2>
+        <p style="font-size: 17px; line-height: 1.7; color: rgba(36,27,18,0.78); margin: 20px 0 0; max-width: 460px">Enquiries answered personally, seven days. Quotes hold for the length of the call.</p>
+      </div>
+      <div style="display: grid; gap: 2px">
+        <a href="tel:0420567828" class="km-row" style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 20px; padding: 30px 0; border-top: 1px solid rgba(36,27,18,0.3); color: #241B12" style-hover="color: #5C4520">
+          <span style="font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(36,27,18,0.6)">Phone</span>
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 3vw, 40px)">0420 567 828</span>
+        </a>
+        <a href="mailto:majid@khanmetals.com.au" class="km-row" style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 20px; padding: 30px 0; border-top: 1px solid rgba(36,27,18,0.3); border-bottom: 1px solid rgba(36,27,18,0.3); color: #241B12" style-hover="color: #5C4520">
+          <span style="font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(36,27,18,0.6)">Email</span>
+          <span class="km-break" style="font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 2.2vw, 32px)">majid@khanmetals.com.au</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background: #241B12; color: rgba(244,237,224,0.6)">
+    <div class="km-pad" style="max-width: 1240px; margin: 0 auto; padding: 54px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px; font-size: 13px">
+      <div style="display: flex; align-items: center; gap: 20px">
+        <span style="font-family: 'Cormorant Garamond', serif; font-size: 20px; letter-spacing: 0.16em; color: #DCBB78">KHAN METALS</span>
+        <span>Certified gold &amp; silver bullion · Australia</span>
+      </div>
+      <div style="display: flex; gap: 26px">
+        <a href="tel:0420567828" style="color: rgba(244,237,224,0.6)" style-hover="color: #DCBB78">0420 567 828</a>
+        <a href="mailto:majid@khanmetals.com.au" style="color: rgba(244,237,224,0.6)" style-hover="color: #DCBB78">majid@khanmetals.com.au</a>
+      </div>
+    </div>
+    <div class="km-pad" style="margin: 0 auto; padding: 0 32px 46px; font-size: 12px; line-height: 1.7; color: rgba(244,237,224,0.6); max-width: 900px">
+      Photography: Wikimedia Commons — <a href="https://commons.wikimedia.org/wiki/File:2026-03-30-Perth-Mint-02.jpg" style="color: rgba(244,237,224,0.55)">Elrondil</a> (CC BY 4.0), <a href="https://commons.wikimedia.org/wiki/File:Scottsdale_Mint_100_Troy_Ounce_Silver_Bar.jpg" style="color: rgba(244,237,224,0.55)">Sunfl0wer812</a>, <a href="https://commons.wikimedia.org/wiki/File:Reverse_of_two_ounce_Kookaburra_proof_coin_from_the_Perth_mint.jpg" style="color: rgba(244,237,224,0.55)">Bruxton</a>, <a href="https://commons.wikimedia.org/wiki/File:Silver_ingot_and_granules.jpg" style="color: rgba(244,237,224,0.55)">Mauro Cateb</a> (CC BY-SA); gold bars by Szaaman and the 1855 Sydney Mint sovereign, <a href="https://commons.wikimedia.org/wiki/File:Sovereign,_1855,_Sydney_Mint,_State_Library_of_New_South_Wales,_SAFE_DNC_1.jpg" style="color: rgba(244,237,224,0.55)">State Library of NSW</a> (public domain). Replace with your own stock photography before launch.<br /><br />
+      Bullion is bought and sold at prevailing market prices and its value can fall as well as rise. Information on this site is general in nature and is not financial advice.
+    </div>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { gold: null, silver: null, fx: null, asOf: null, status: 'loading',
+            metal: 'gold', range: '1Y', series: null, cStatus: 'loading', hover: null };
+
+  componentDidMount() {
+    this.load();
+    this.loadSeries();
+    this.timer = setInterval(() => this.load(true), 300000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  toggleMenu = () => this.setState(s => ({ menu: !s.menu }));
+  closeMenu = () => this.setState({ menu: false });
+
+  setMetal = (m) => { if (m !== this.state.metal) this.setState({ metal: m, series: null }, () => this.loadSeries()); };
+  setRange = (r) => { if (r !== this.state.range) this.setState({ range: r, series: null }, () => this.loadSeries()); };
+
+  cacheGet() {
+    try {
+      const raw = localStorage.getItem('km-spot-cache');
+      if (!raw) return null;
+      const c = JSON.parse(raw);
+      if (Date.now() - c.t > 300000) return null;
+      return c;
+    } catch (e) { return null; }
+  }
+
+  async load(force) {
+    if (!force) {
+      const c = this.cacheGet();
+      if (c) { this.setState({ gold: c.gold, silver: c.silver, fx: c.fx, asOf: c.t, status: 'ok' }); return; }
+    }
+    const j = async (u) => { const r = await fetch(u, { cache: 'no-store' }); if (!r.ok) throw new Error(r.status); return r.json(); };
+    try {
+      const [xau, xag, fx] = await Promise.all([
+        j('https://api.gold-api.com/price/XAU'),
+        j('https://api.gold-api.com/price/XAG'),
+        j('https://open.er-api.com/v6/latest/USD')
+      ]);
+      const rate = fx && fx.rates && fx.rates.AUD;
+      if (!rate || !xau.price || !xag.price) throw new Error('bad payload');
+      const data = { gold: xau.price * rate, silver: xag.price * rate, fx: rate, t: Date.now() };
+      try { localStorage.setItem('km-spot-cache', JSON.stringify(data)); } catch (e) {}
+      this.setState({ gold: data.gold, silver: data.silver, fx: rate, asOf: data.t, status: 'ok' });
+    } catch (e) {
+      try {
+        const x = await j('https://xaus.com/api/gold-price?currency=AUD');
+        const oz = (x.price_per_troy_ounce ?? x.prices?.AUD?.troy_ounce ?? x.price);
+        if (!oz) throw new Error('no fallback price');
+        this.setState({ gold: oz, silver: null, asOf: Date.now(), status: 'ok' });
+      } catch (e2) {
+        this.setState({ status: 'error' });
+      }
+    }
+  }
+
+  // ---------- chart data ----------
+  async ensureIntraday(metal) {
+    this.iCache = this.iCache || {};
+    const k = metal;
+    const c = this.iCache[k];
+    if (c && Date.now() - c.t < 120000) return c.pts;
+    const r = await fetch('https://xaus.com/api/v1/intraday?symbol=' + (metal === 'gold' ? 'xau' : 'xag') + '&hours=48');
+    if (!r.ok) throw new Error('intraday ' + r.status);
+    const d = await r.json();
+    const pts = (d.points || []).map(p => [p.t * 1000, p.p]);
+    this.iCache[k] = { t: Date.now(), pts };
+    return pts;
+  }
+
+  async ensureDaily(metal) {
+    this.dCache = this.dCache || {};
+    if (this.dCache[metal]) return this.dCache[metal];
+    const key = 'km-lbma-' + metal;
+    try {
+      const raw = JSON.parse(localStorage.getItem(key) || 'null');
+      if (raw && Date.now() - raw.t < 43200000) { this.dCache[metal] = raw.pts; return raw.pts; }
+    } catch (e) {}
+    const url = metal === 'gold'
+      ? 'https://prices.lbma.org.uk/json/gold_pm.json'
+      : 'https://prices.lbma.org.uk/json/silver.json';
+    const r = await fetch(url);
+    if (!r.ok) throw new Error('lbma ' + r.status);
+    const rows = await r.json();
+    const cut = Date.now() - 21 * 365.25 * 864e5;
+    const pts = rows
+      .map(x => [Date.parse(x.d + 'T00:00:00Z'), Array.isArray(x.v) ? x.v[0] : null])
+      .filter(p => p[1] && p[0] >= cut)
+      .sort((a, b) => a[0] - b[0]);
+    this.dCache[metal] = pts;
+    try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), pts })); } catch (e) {}
+    return pts;
+  }
+
+  // Daily USD→AUD reference rates (ECB via Frankfurter), so historical
+  // prices convert at the rate that applied on the day, not today's.
+  async ensureFx() {
+    if (this.fxSeries) return this.fxSeries;
+    try {
+      const raw = JSON.parse(localStorage.getItem('km-fx-aud') || 'null');
+      if (raw && Date.now() - raw.t < 43200000) { this.fxSeries = raw.pts; return raw.pts; }
+    } catch (e) {}
+    const from = new Date(Date.now() - 21 * 365.25 * 864e5).toISOString().slice(0, 10);
+    const r = await fetch('https://api.frankfurter.dev/v1/' + from + '..?base=USD&symbols=AUD');
+    if (!r.ok) throw new Error('fx ' + r.status);
+    const d = await r.json();
+    const pts = Object.keys(d.rates || {}).sort()
+      .map(k => [Date.parse(k + 'T00:00:00Z'), d.rates[k].AUD])
+      .filter(p => p[1]);
+    this.fxSeries = pts;
+    try { localStorage.setItem('km-fx-aud', JSON.stringify({ t: Date.now(), pts })); } catch (e) {}
+    return pts;
+  }
+
+  toAud(pts, fx) {
+    let i = 0;
+    return pts.map(p => {
+      while (i + 1 < fx.length && fx[i + 1][0] <= p[0]) i++;
+      let j = i;
+      if (fx[j][0] > p[0]) j = 0;
+      return [p[0], p[1] * fx[j][1]];
+    });
+  }
+
+  async loadSeries() {
+    const { metal, range } = this.state;
+    const tag = metal + range;
+    this.setState({ cStatus: 'loading' });
+    try {
+      let pts;
+      if (range === '1H' || range === '24H') {
+        const all = await this.ensureIntraday(metal);
+        const hrs = range === '1H' ? 1 : 24;
+        const cut = Date.now() - hrs * 3600000;
+        pts = all.filter(p => p[0] >= cut);
+        if (pts.length < 3) pts = all.slice(-Math.max(3, Math.round(all.length / 4)));
+        let rate = this.state.fx;
+        if (!rate) { const fx = await this.ensureFx(); rate = fx[fx.length - 1][1]; }
+        pts = pts.map(p => [p[0], p[1] * rate]);
+      } else {
+        const yrs = { '1W': 7 / 365, '1M': 1 / 12, '1Y': 1, '5Y': 5, '20Y': 20 }[range];
+        const [all, fx] = await Promise.all([this.ensureDaily(metal), this.ensureFx()]);
+        const cut = Date.now() - yrs * 365.25 * 864e5;
+        pts = this.toAud(all.filter(p => p[0] >= cut), fx);
+      }
+      if (this.state.metal + this.state.range !== tag) return;
+      this.setState({ series: this.downsample(pts, 480), cStatus: pts.length ? 'ok' : 'error', hover: null });
+    } catch (e) {
+      this.setState({ cStatus: 'error' });
+    }
+  }
+
+  downsample(pts, max) {
+    if (pts.length <= max) return pts;
+    const step = pts.length / max, out = [];
+    for (let i = 0; i < max; i++) {
+      const a = Math.floor(i * step), b = Math.min(pts.length, Math.floor((i + 1) * step));
+      let s = 0;
+      for (let k = a; k < b; k++) s += pts[k][1];
+      out.push([pts[a][0], s / (b - a)]);
+    }
+    out[out.length - 1] = pts[pts.length - 1];
+    return out;
+  }
+
+  onMove = (e) => {
+    const s = this.state.series;
+    if (!s || s.length < 2) return;
+    const box = e.currentTarget.getBoundingClientRect();
+    const cx = e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX;
+    const f = (cx - box.left) / box.width;
+    const i = Math.max(0, Math.min(s.length - 1, Math.round(f * (s.length - 1))));
+    if (i !== this.state.hover) this.setState({ hover: i });
+  };
+  onLeave = () => this.setState({ hover: null });
+
+  fmtDate(ts) {
+    const d = new Date(ts), r = this.state.range;
+    if (r === '1H' || r === '24H') return d.toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' });
+    if (r === '1W' || r === '1M') return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+    if (r === '1Y') return d.toLocaleDateString('en-AU', { month: 'short', year: '2-digit' });
+    return String(d.getFullYear());
+  }
+
+  chart() {
+    const s = this.state.series;
+    const W = 1000, H = 300, PL = 62, PR = 14, PT = 16, PB = 28;
+    const blank = { line: '', area: '', yTicks: [], xTicks: [], hx: -50, hy: -50, showHover: 'false' };
+    if (!s || s.length < 2) return blank;
+    const vs = s.map(p => p[1]);
+    let lo = Math.min(...vs), hi = Math.max(...vs);
+    const pad = (hi - lo) * 0.12 || hi * 0.02;
+    lo = lo - pad <= 0 ? Math.min(...vs) * 0.9 : lo - pad;
+    hi += pad;
+    const X = i => PL + (i / (s.length - 1)) * (W - PL - PR);
+    const Y = v => PT + (1 - (v - lo) / (hi - lo)) * (H - PT - PB);
+    const line = s.map((p, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
+    const area = line + ' L' + X(s.length - 1).toFixed(1) + ' ' + (H - PB) + ' L' + PL + ' ' + (H - PB) + ' Z';
+    const dec = this.state.metal === 'gold' ? 0 : 2;
+    const yTicks = [0, 1, 2, 3].map(k => {
+      const v = lo + ((hi - lo) * (3 - k)) / 3;
+      return { key: 'y' + k, y: Y(v).toFixed(1), top: (Y(v) - 9).toFixed(1) + 'px', label: this.fmt(v, dec) };
+    });
+    const nx = Math.min(5, s.length);
+    const xTicks = Array.from({ length: nx }, (_, k) => {
+      const i = Math.round((k / (nx - 1)) * (s.length - 1));
+      return { key: 'x' + k, x: X(i).toFixed(1), label: this.fmtDate(s[i][0]) };
+    });
+    const h = this.state.hover;
+    const showHover = h != null && s[h] ? 'true' : 'false';
+    return {
+      line, area, yTicks, xTicks,
+      hx: h != null && s[h] ? X(h).toFixed(1) : -50,
+      hy: h != null && s[h] ? Y(s[h][1]).toFixed(1) : -50,
+      showHover
+    };
+  }
+
+  fmt(n, d) {
+    if (n == null) return '—';
+    return '$' + n.toLocaleString('en-AU', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const ok = s.status === 'ok';
+    const time = s.asOf ? new Date(s.asOf).toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' }) : '';
+    const c = this.chart();
+    const ser = s.series;
+    const dec = s.metal === 'gold' ? 0 : 2;
+    const first = ser && ser.length ? ser[0][1] : null;
+    const lastV = ser && ser.length ? ser[ser.length - 1][1] : null;
+    const shown = s.hover != null && ser && ser[s.hover] ? ser[s.hover] : (ser && ser.length ? ser[ser.length - 1] : null);
+    const chg = first && lastV ? ((lastV - first) / first) * 100 : null;
+    const chips = ['1H', '24H', '1W', '1M', '1Y', '5Y', '20Y'].map(r => ({
+      key: r, label: r, on: s.range === r ? 'true' : 'false', click: () => this.setRange(r)
+    }));
+    return {
+      menuOpen: !!s.menu,
+      toggleMenu: this.toggleMenu,
+      closeMenu: this.closeMenu,
+      burgerLabel: s.menu ? 'Close' : 'Menu',
+      metalGold: s.metal === 'gold' ? 'true' : 'false',
+      metalSilver: s.metal === 'silver' ? 'true' : 'false',
+      pickGold: () => this.setMetal('gold'),
+      pickSilver: () => this.setMetal('silver'),
+      chips,
+      chartLine: c.line,
+      chartArea: c.area,
+      yTicks: c.yTicks,
+      xTicks: c.xTicks,
+      hx: c.hx, hy: c.hy, showHover: c.showHover,
+      onMove: this.onMove, onLeave: this.onLeave,
+      chartFill: s.metal === 'gold' ? 'url(#kmGold)' : 'url(#kmSilver)',
+      chartStroke: s.metal === 'gold' ? '#DCBB78' : '#C6CBD1',
+      readPrice: shown ? this.fmt(shown[1], dec) : '—',
+      readWhen: shown ? this.fmtDate(shown[0]) : '',
+      readLabel: s.hover != null ? 'At ' : 'Latest ',
+      chgLabel: chg == null ? '' : (chg >= 0 ? '▲ ' : '▼ ') + Math.abs(chg).toFixed(2) + '% over ' + s.range,
+      chgColor: chg == null ? 'rgba(244,237,224,0.5)' : (chg >= 0 ? '#8FCB8F' : '#E29A8C'),
+      chartNote: s.cStatus === 'error'
+        ? 'Chart data unavailable right now.'
+        : (s.range === '1H' || s.range === '24H'
+          ? 'AUD / troy oz · live spot sampled every 2 minutes'
+          : 'AUD / troy oz · LBMA daily benchmark at each day\u2019s USD/AUD rate'),
+      chartBusy: s.cStatus === 'loading' ? 'true' : 'false',
+      goldOz: ok ? this.fmt(s.gold, 0) : (s.status === 'error' ? 'Call for price' : 'Loading…'),
+      goldG: ok && s.gold ? this.fmt(s.gold / 31.1035, 2) : '—',
+      silverOz: ok && s.silver ? this.fmt(s.silver, 2) : (s.status === 'error' ? 'Call for price' : 'Loading…'),
+      silverKg: ok && s.silver ? this.fmt((s.silver / 31.1035) * 1000, 0) : '—',
+      stamp: ok ? 'Indicative AUD spot · updated ' + time : (s.status === 'error' ? 'Live feed unavailable — call for today\u2019s rate' : 'Fetching live spot…'),
+      live: ok
+    };
+  }
+}
+</script>
+</body>
+</html>

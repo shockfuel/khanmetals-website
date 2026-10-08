@@ -442,7 +442,7 @@
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = { gold: null, silver: null, fx: null, asOf: null, status: 'loading',
-            metal: 'gold', range: '1Y', series: null, cStatus: 'loading', hover: null };
+            metal: 'gold', range: '1Y', series: null, cStatus: 'loading', hover: null, fxFlat: false };
 
   componentDidMount() {
     this.load();
@@ -454,8 +454,9 @@ class Component extends DCLogic {
   toggleMenu = () => this.setState(s => ({ menu: !s.menu }));
   closeMenu = () => this.setState({ menu: false });
 
-  setMetal = (m) => { if (m !== this.state.metal) this.setState({ metal: m, series: null }, () => this.loadSeries()); };
-  setRange = (r) => { if (r !== this.state.range) this.setState({ range: r, series: null }, () => this.loadSeries()); };
+  // Re-picking the current metal/range after an error retries the load.
+  setMetal = (m) => { if (m !== this.state.metal || this.state.cStatus === 'error') this.setState({ metal: m, series: null }, () => this.loadSeries()); };
+  setRange = (r) => { if (r !== this.state.range || this.state.cStatus === 'error') this.setState({ range: r, series: null }, () => this.loadSeries()); };
 
   cacheGet() {
     try {
@@ -485,11 +486,13 @@ class Component extends DCLogic {
       try { localStorage.setItem('km-spot-cache', JSON.stringify(data)); } catch (e) {}
       this.setState({ gold: data.gold, silver: data.silver, fx: rate, asOf: data.t, status: 'ok' });
     } catch (e) {
+      // Backup feed: XAUS spot (browser-friendly) gives gold in AUD, silver in USD and the FX rate it used.
       try {
-        const x = await j('https://xaus.com/api/gold-price?currency=AUD');
-        const oz = (x.price_per_troy_ounce ?? x.prices?.AUD?.troy_ounce ?? x.price);
-        if (!oz) throw new Error('no fallback price');
-        this.setState({ gold: oz, silver: null, asOf: Date.now(), status: 'ok' });
+        const x = await j('https://xaus.com/api/v1/spot?currency=AUD&compact=1');
+        const oz = x && x.xau && x.xau.price;
+        const rate = x && x.fx_rate;
+        if (!oz || !rate) throw new Error('no fallback price');
+        this.setState({ gold: oz, silver: x.silver_usd_oz ? x.silver_usd_oz * rate : null, fx: rate, asOf: Date.now(), status: 'ok' });
       } catch (e2) {
         this.setState({ status: 'error' });
       }
@@ -497,6 +500,17 @@ class Component extends DCLogic {
   }
 
   // ---------- chart data ----------
+  // Every feed below sends CORS headers, so it works on the live domain.
+  // (History used to come from prices.lbma.org.uk, which sends none: browsers
+  // blocked it, so every range except 1H/24H came up empty.)
+
+  // Share one in-flight request per key, so quick clicks don't download twice.
+  once(key, fn) {
+    this.inflight = this.inflight || {};
+    if (!this.inflight[key]) this.inflight[key] = fn().finally(() => { delete this.inflight[key]; });
+    return this.inflight[key];
+  }
+
   async ensureIntraday(metal) {
     this.iCache = this.iCache || {};
     const k = metal;
@@ -510,28 +524,48 @@ class Component extends DCLogic {
     return pts;
   }
 
-  async ensureDaily(metal) {
-    this.dCache = this.dCache || {};
-    if (this.dCache[metal]) return this.dCache[metal];
-    const key = 'km-lbma-' + metal;
-    try {
-      const raw = JSON.parse(localStorage.getItem(key) || 'null');
-      if (raw && Date.now() - raw.t < 43200000) { this.dCache[metal] = raw.pts; return raw.pts; }
-    } catch (e) {}
-    const url = metal === 'gold'
-      ? 'https://prices.lbma.org.uk/json/gold_pm.json'
-      : 'https://prices.lbma.org.uk/json/silver.json';
-    const r = await fetch(url);
-    if (!r.ok) throw new Error('lbma ' + r.status);
-    const rows = await r.json();
-    const cut = Date.now() - 21 * 365.25 * 864e5;
-    const pts = rows
-      .map(x => [Date.parse(x.d + 'T00:00:00Z'), Array.isArray(x.v) ? x.v[0] : null])
-      .filter(p => p[1] && p[0] >= cut)
-      .sort((a, b) => a[0] - b[0]);
-    this.dCache[metal] = pts;
-    try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), pts })); } catch (e) {}
-    return pts;
+  // 1W–20Y: XAUS chart API (COMEX futures prices via Yahoo Finance, USD / troy oz).
+  // 1W and 1M share one hourly series.
+  histSpec(range) {
+    return {
+      '1W':  { range: '1mo', interval: '60m', ttl: 900000,   label: 'hourly' },
+      '1M':  { range: '1mo', interval: '60m', ttl: 900000,   label: 'hourly' },
+      '1Y':  { range: '1y',  interval: '1d',  ttl: 10800000, label: 'daily close' },
+      '5Y':  { range: '5y',  interval: '1wk', ttl: 43200000, label: 'weekly close' },
+      '20Y': { range: 'max', interval: '1mo', ttl: 43200000, label: 'monthly close' }
+    }[range];
+  }
+
+  async ensureHistory(metal, range) {
+    const spec = this.histSpec(range);
+    const key = 'km-hist-' + metal + '-' + spec.range + '-' + spec.interval;
+    const fresh = c => c && c.pts && c.pts.length > 1 && Date.now() - c.t < spec.ttl;
+    this.hCache = this.hCache || {};
+    if (fresh(this.hCache[key])) return this.hCache[key].pts;
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
+    if (fresh(saved)) { this.hCache[key] = saved; return saved.pts; }
+    return this.once(key, async () => {
+      try {
+        const r = await fetch('https://xaus.com/api/v1/chart?symbol=' + (metal === 'gold' ? 'xau' : 'silver') +
+          '&range=' + spec.range + '&interval=' + spec.interval);
+        if (!r.ok) throw new Error('history ' + r.status);
+        const d = await r.json();
+        const pts = (d.points || [])
+          .map(p => [p.t * 1000, p.c])
+          .filter(p => Number.isFinite(p[0]) && Number.isFinite(p[1]) && p[1] > 0)
+          .sort((a, b) => a[0] - b[0]);
+        if (pts.length < 2) throw new Error('history empty');
+        const entry = { t: Date.now(), pts };
+        this.hCache[key] = entry;
+        try { localStorage.setItem(key, JSON.stringify(entry)); } catch (e) {}
+        return pts;
+      } catch (e) {
+        // Feed unreachable: show the last copy this browser saved, however old.
+        if (saved && saved.pts && saved.pts.length > 1) return saved.pts;
+        throw e;
+      }
+    });
   }
 
   // Daily USD→AUD reference rates (ECB via Frankfurter), so historical
@@ -540,18 +574,32 @@ class Component extends DCLogic {
     if (this.fxSeries) return this.fxSeries;
     try {
       const raw = JSON.parse(localStorage.getItem('km-fx-aud') || 'null');
-      if (raw && Date.now() - raw.t < 43200000) { this.fxSeries = raw.pts; return raw.pts; }
+      if (raw && raw.pts && raw.pts.length && Date.now() - raw.t < 43200000) { this.fxSeries = raw.pts; return raw.pts; }
     } catch (e) {}
-    const from = new Date(Date.now() - 21 * 365.25 * 864e5).toISOString().slice(0, 10);
-    const r = await fetch('https://api.frankfurter.dev/v1/' + from + '..?base=USD&symbols=AUD');
-    if (!r.ok) throw new Error('fx ' + r.status);
-    const d = await r.json();
-    const pts = Object.keys(d.rates || {}).sort()
-      .map(k => [Date.parse(k + 'T00:00:00Z'), d.rates[k].AUD])
-      .filter(p => p[1]);
-    this.fxSeries = pts;
-    try { localStorage.setItem('km-fx-aud', JSON.stringify({ t: Date.now(), pts })); } catch (e) {}
-    return pts;
+    return this.once('fx', async () => {
+      const from = new Date(Date.now() - 21 * 365.25 * 864e5).toISOString().slice(0, 10);
+      const r = await fetch('https://api.frankfurter.dev/v1/' + from + '..?base=USD&symbols=AUD');
+      if (!r.ok) throw new Error('fx ' + r.status);
+      const d = await r.json();
+      const pts = Object.keys(d.rates || {}).sort()
+        .map(k => [Date.parse(k + 'T00:00:00Z'), d.rates[k].AUD])
+        .filter(p => p[1]);
+      if (!pts.length) throw new Error('fx empty');
+      this.fxSeries = pts;
+      try { localStorage.setItem('km-fx-aud', JSON.stringify({ t: Date.now(), pts })); } catch (e) {}
+      return pts;
+    });
+  }
+
+  // Today's USD→AUD only: the spot bar's live rate, else open.er-api.
+  // Backup for when the daily ECB series can't be loaded.
+  async liveFx() {
+    if (this.state.fx) return this.state.fx;
+    const r = await fetch('https://open.er-api.com/v6/latest/USD');
+    const d = r.ok ? await r.json() : null;
+    const rate = d && d.rates && d.rates.AUD;
+    if (!rate) throw new Error('fx unavailable');
+    return rate;
   }
 
   toAud(pts, fx) {
@@ -564,12 +612,12 @@ class Component extends DCLogic {
     });
   }
 
-  async loadSeries() {
+  async loadSeries(isRetry) {
     const { metal, range } = this.state;
     const tag = metal + range;
     this.setState({ cStatus: 'loading' });
     try {
-      let pts;
+      let pts, fxFlat = false;
       if (range === '1H' || range === '24H') {
         const all = await this.ensureIntraday(metal);
         const hrs = range === '1H' ? 1 : 24;
@@ -577,18 +625,29 @@ class Component extends DCLogic {
         pts = all.filter(p => p[0] >= cut);
         if (pts.length < 3) pts = all.slice(-Math.max(3, Math.round(all.length / 4)));
         let rate = this.state.fx;
-        if (!rate) { const fx = await this.ensureFx(); rate = fx[fx.length - 1][1]; }
+        if (!rate) {
+          try { const fx = await this.ensureFx(); rate = fx[fx.length - 1][1]; }
+          catch (e) { rate = await this.liveFx(); }
+        }
         pts = pts.map(p => [p[0], p[1] * rate]);
       } else {
-        const yrs = { '1W': 7 / 365, '1M': 1 / 12, '1Y': 1, '5Y': 5, '20Y': 20 }[range];
-        const [all, fx] = await Promise.all([this.ensureDaily(metal), this.ensureFx()]);
+        const yrs = { '1W': 7 / 365.25, '1M': 1 / 12, '1Y': 1, '5Y': 5, '20Y': 20 }[range];
+        const [all, fx] = await Promise.all([this.ensureHistory(metal, range), this.ensureFx().catch(() => null)]);
         const cut = Date.now() - yrs * 365.25 * 864e5;
-        pts = this.toAud(all.filter(p => p[0] >= cut), fx);
+        const usd = all.filter(p => p[0] >= cut);
+        if (fx) pts = this.toAud(usd, fx);
+        else { const rate = await this.liveFx(); pts = usd.map(p => [p[0], p[1] * rate]); fxFlat = true; }
       }
       if (this.state.metal + this.state.range !== tag) return;
-      this.setState({ series: this.downsample(pts, 480), cStatus: pts.length ? 'ok' : 'error', hover: null });
+      this.setState({ series: this.downsample(pts, 480), cStatus: pts.length > 1 ? 'ok' : 'error', hover: null, fxFlat });
     } catch (e) {
+      // Ignore failures from a metal/range the visitor has already moved away from.
+      if (this.state.metal + this.state.range !== tag) return;
       this.setState({ cStatus: 'error' });
+      // One automatic retry, for a brief network blip.
+      if (!isRetry) setTimeout(() => {
+        if (this.state.metal + this.state.range === tag && this.state.cStatus === 'error') this.loadSeries(true);
+      }, 5000);
     }
   }
 
@@ -605,13 +664,25 @@ class Component extends DCLogic {
     return out;
   }
 
+  // 5Y/20Y use a true time axis: the monthly 20Y feed skips some months, so spacing
+  // points evenly would shift the dates. Shorter ranges keep one slot per data point,
+  // so nights and weekends without trading don't show as long flat lines.
+  timeAxis() { return this.state.range === '5Y' || this.state.range === '20Y'; }
+
   onMove = (e) => {
     const s = this.state.series;
     if (!s || s.length < 2) return;
     const box = e.currentTarget.getBoundingClientRect();
     const cx = e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX;
-    const f = (cx - box.left) / box.width;
-    const i = Math.max(0, Math.min(s.length - 1, Math.round(f * (s.length - 1))));
+    // Cursor position across the plotted area: the 1000-unit-wide chart keeps
+    // 62 units on the left for price labels and 14 on the right (see chart()).
+    const f = Math.max(0, Math.min(1, (((cx - box.left) / box.width) * 1000 - 62) / 924));
+    let i = Math.round(f * (s.length - 1));
+    if (this.timeAxis()) {
+      const t = s[0][0] + f * (s[s.length - 1][0] - s[0][0]);
+      i = 0;
+      for (let k = 1; k < s.length; k++) if (Math.abs(s[k][0] - t) < Math.abs(s[i][0] - t)) i = k;
+    }
     if (i !== this.state.hover) this.setState({ hover: i });
   };
   onLeave = () => this.setState({ hover: null });
@@ -624,6 +695,15 @@ class Component extends DCLogic {
     return String(d.getFullYear());
   }
 
+  // Fuller date/time for the price readout above the chart.
+  fmtWhen(ts) {
+    const d = new Date(ts), r = this.state.range;
+    if (r === '1H' || r === '24H') return d.toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' });
+    if (r === '1W' || r === '1M') return d.toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
+    if (r === '20Y') return d.toLocaleDateString('en-AU', { month: 'short', year: 'numeric' });
+    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
   chart() {
     const s = this.state.series;
     const W = 1000, H = 300, PL = 62, PR = 14, PT = 16, PB = 28;
@@ -632,9 +712,11 @@ class Component extends DCLogic {
     const vs = s.map(p => p[1]);
     let lo = Math.min(...vs), hi = Math.max(...vs);
     const pad = (hi - lo) * 0.12 || hi * 0.02;
-    lo = lo - pad <= 0 ? Math.min(...vs) * 0.9 : lo - pad;
+    // Very long ranges (20Y) would pad the axis down to an odd near-zero label like "$24": start at $0.
+    lo = lo - pad <= lo * 0.5 ? 0 : lo - pad;
     hi += pad;
-    const X = i => PL + (i / (s.length - 1)) * (W - PL - PR);
+    const t0 = s[0][0], span = (s[s.length - 1][0] - t0) || 1, byTime = this.timeAxis();
+    const X = i => PL + (byTime ? (s[i][0] - t0) / span : i / (s.length - 1)) * (W - PL - PR);
     const Y = v => PT + (1 - (v - lo) / (hi - lo)) * (H - PT - PB);
     const line = s.map((p, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ');
     const area = line + ' L' + X(s.length - 1).toFixed(1) + ' ' + (H - PB) + ' L' + PL + ' ' + (H - PB) + ' Z';
@@ -646,7 +728,8 @@ class Component extends DCLogic {
     const nx = Math.min(5, s.length);
     const xTicks = Array.from({ length: nx }, (_, k) => {
       const i = Math.round((k / (nx - 1)) * (s.length - 1));
-      return { key: 'x' + k, x: X(i).toFixed(1), label: this.fmtDate(s[i][0]) };
+      const ts = byTime ? t0 + (k / (nx - 1)) * span : s[i][0];
+      return { key: 'x' + k, x: (byTime ? PL + (k / (nx - 1)) * (W - PL - PR) : X(i)).toFixed(1), label: this.fmtDate(ts) };
     });
     const h = this.state.hover;
     const showHover = h != null && s[h] ? 'true' : 'false';
@@ -696,15 +779,18 @@ class Component extends DCLogic {
       chartFill: s.metal === 'gold' ? 'url(#kmGold)' : 'url(#kmSilver)',
       chartStroke: s.metal === 'gold' ? '#DCBB78' : '#C6CBD1',
       readPrice: shown ? this.fmt(shown[1], dec) : '—',
-      readWhen: shown ? this.fmtDate(shown[0]) : '',
+      readWhen: shown ? this.fmtWhen(shown[0]) : '',
       readLabel: s.hover != null ? 'At ' : 'Latest ',
       chgLabel: chg == null ? '' : (chg >= 0 ? '▲ ' : '▼ ') + Math.abs(chg).toFixed(2) + '% over ' + s.range,
       chgColor: chg == null ? 'rgba(244,237,224,0.5)' : (chg >= 0 ? '#8FCB8F' : '#E29A8C'),
       chartNote: s.cStatus === 'error'
-        ? 'Chart data unavailable right now.'
-        : (s.range === '1H' || s.range === '24H'
-          ? 'AUD / troy oz · live spot sampled every 2 minutes'
-          : 'AUD / troy oz · LBMA daily benchmark at each day\u2019s USD/AUD rate'),
+        ? 'Chart data unavailable right now \u2014 tap a range to try again.'
+        : s.cStatus === 'loading'
+          ? 'Loading chart\u2026'
+          : (s.range === '1H' || s.range === '24H'
+            ? 'AUD / troy oz · live spot sampled every 2 minutes'
+            : 'AUD / troy oz · COMEX futures, ' + this.histSpec(s.range).label +
+              (s.fxFlat ? ' · at today\u2019s USD/AUD rate' : ' · at each day\u2019s USD/AUD rate')),
       chartBusy: s.cStatus === 'loading' ? 'true' : 'false',
       goldOz: ok ? this.fmt(s.gold, 0) : (s.status === 'error' ? 'Call for price' : 'Loading…'),
       goldG: ok && s.gold ? this.fmt(s.gold / 31.1035, 2) : '—',
